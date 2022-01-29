@@ -1,6 +1,8 @@
 import { on, qs } from "../helpers.js";
 import View from "./View.js";
 
+const tag = "[SearchFormView]";
+
 export default class SearchFormView extends View {
   constructor() {
     super(qs("#search-form-view"));
@@ -17,19 +19,28 @@ export default class SearchFormView extends View {
 
   bindEvent() {
     on(this.inputElement, "keyup", () => this.handleKeyup());
-    on(this.element, "submit", (e) => this.handleSubmit(e));
+    this.on("submit", (e) => this.handleSubmit(e));
+    on(this.reserElement, "click", () => this.handleReset());
   }
 
   handleKeyup() {
     const { value } = this.inputElement;
     this.showResetButton(value.length > 0);
+
+    if (value.length <= 0) {
+      this.handleReset();
+    }
   }
 
   handleSubmit(e) {
     e.preventDefault();
 
-    console.log("[SearchFormView]", "handleSubmit");
     const { value } = this.inputElement;
     this.emit("@submit", { value });
+  }
+
+  handleReset() {
+    console.log(tag, "handleReset");
+    this.emit("@reset");
   }
 }
