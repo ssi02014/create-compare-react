@@ -1,9 +1,9 @@
-import { qs } from "../helpers";
-import View from "./View";
+import { qs } from "../helpers.js";
+import View from "./View.js";
 
 export default class SearchResultView extends View {
   constructor() {
-    super(qs("search-result-view"));
+    super(qs("#search-result-view"));
 
     this.template = new Template();
   }
