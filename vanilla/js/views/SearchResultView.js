@@ -32,6 +32,7 @@ class Template {
       <div class="empty-box">검색결과가 없습니다.</div>
     `;
   }
+
   getItem({ imageUrl, name }) {
     return `
       <li>

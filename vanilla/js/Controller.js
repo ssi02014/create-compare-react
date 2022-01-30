@@ -1,10 +1,11 @@
 const tag = "[Controller]";
 
 export default class Controller {
-  constructor(store, { searchFormView }) {
+  constructor(store, { searchFormView, searchResultView }) {
     this.store = store;
 
     this.searchFormView = searchFormView;
+    this.searchResultView = searchResultView;
 
     this.subscribeViewEvents();
   }
