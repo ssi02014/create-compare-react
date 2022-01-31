@@ -8,19 +8,19 @@ export default class SearchFormView extends View {
     super(qs("#search-form-view"));
 
     this.inputElement = qs("[type=text]", this.element);
-    this.reserElement = qs("[type=reset]", this.element);
+    this.resetElement = qs("[type=reset]", this.element);
     this.showResetButton(false);
     this.bindEvent();
   }
 
   showResetButton(visible = true) {
-    this.reserElement.style.display = visible ? "block" : "none";
+    this.resetElement.style.display = visible ? "block" : "none";
   }
 
   bindEvent() {
     on(this.inputElement, "keyup", () => this.handleKeyup());
     this.on("submit", (e) => this.handleSubmit(e));
-    on(this.reserElement, "click", () => this.handleReset());
+    on(this.resetElement, "click", () => this.handleReset());
   }
 
   handleKeyup() {
@@ -40,7 +40,6 @@ export default class SearchFormView extends View {
   }
 
   handleReset() {
-    console.log(tag, "handleReset");
     this.emit("@reset");
   }
 }

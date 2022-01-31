@@ -17,13 +17,14 @@ export default class Controller {
   }
 
   search(searchKeyword) {
-    console.log(tag, searchKeyword);
     this.store.search(searchKeyword);
     this.render();
   }
 
   reset() {
-    console.log(tag, "reset");
+    this.store.searchKeyword = "";
+    this.store.searchResult = [];
+    this.render();
   }
 
   render() {
