@@ -1,3 +1,5 @@
+import { TabType } from "./views/TabView.js";
+
 const tag = "[store]";
 
 // Model의 역할
@@ -10,6 +12,7 @@ export default class Store {
 
     this.searchKeyword = "";
     this.searchResult = [];
+    this.selectedTab = TabType.keyword;
   }
 
   search(keyword) {
