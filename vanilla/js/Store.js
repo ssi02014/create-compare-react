@@ -1,4 +1,5 @@
 import { TabType } from "./views/TabView.js";
+import { createNextId, createPastDate } from "./helpers.js";
 
 const tag = "[store]";
 
@@ -14,11 +15,13 @@ export default class Store {
     this.selectedTab = TabType.keyword;
   }
 
+  // 검색
   search(keyword) {
     this.searchKeyword = keyword;
     this.searchResult = this.storage.productData.filter((product) =>
       product.name.includes(keyword)
     );
+    this.addHistory(keyword);
   }
 
   // 추천 검색어 목록을 storage에서 찾아 반환해주는 메서드
@@ -36,7 +39,27 @@ export default class Store {
     );
   }
 
+  addHistory(keyword) {
+    keyword = keyword.trim();
+
+    if (!keyword) return;
+
+    const id = createNextId(this.storage.historyData);
+    const date = new Date();
+
+    const hasHistory = this.storage.historyData.some(
+      (history) => history.keyword === keyword
+    );
+
+    if (hasHistory) {
+      this.removeHistory(keyword);
+    }
+
+    this.storage.historyData.push({ id, keyword, date });
+    this.storage.historyData = this.storage.historyData.sort(this._sortHistory);
+  }
+
   _sortHistory(a, b) {
-    return b.date > a.date;
+    return b.date - a.date;
   }
 }
