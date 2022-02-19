@@ -39,7 +39,9 @@ export default class Controller {
     this.keywordListView.on("@click", (e) => this.search(e.detail.value));
 
     // 검색 기록
-    this.historyListView.on("@click", (e) => this.search(e.detail.value));
+    this.historyListView
+      .on("@click", (e) => this.search(e.detail.value))
+      .on("@remove", (e) => this.removeHistory(e.detail.value));
   }
 
   changeTab(tab) {
@@ -56,6 +58,11 @@ export default class Controller {
   reset() {
     this.store.searchKeyword = "";
     this.store.searchResult = [];
+    this.render();
+  }
+
+  removeHistory(keyword) {
+    this.store.removeHistory(keyword);
     this.render();
   }
 

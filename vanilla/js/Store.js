@@ -30,6 +30,12 @@ export default class Store {
     return this.storage.historyData.sort(this._sortHistory);
   }
 
+  removeHistory(keyword) {
+    this.storage.historyData = this.storage.historyData.filter(
+      (history) => history.keyword !== keyword
+    );
+  }
+
   _sortHistory(a, b) {
     return b.date > a.date;
   }
