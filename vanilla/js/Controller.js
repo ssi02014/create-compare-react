@@ -3,7 +3,13 @@ import { TabType } from "./views/TabView.js";
 export default class Controller {
   constructor(
     store,
-    { searchFormView, searchResultView, tabView, keywordListView }
+    {
+      searchFormView,
+      searchResultView,
+      tabView,
+      keywordListView,
+      historyListView,
+    }
   ) {
     this.store = store;
 
@@ -11,6 +17,7 @@ export default class Controller {
     this.searchResultView = searchResultView;
     this.tabView = tabView;
     this.keywordListView = keywordListView;
+    this.historyListView = historyListView;
 
     this.searchKeyword = "";
 
@@ -30,6 +37,9 @@ export default class Controller {
 
     // 키워드
     this.keywordListView.on("@click", (e) => this.search(e.detail.value));
+
+    // 검색 기록
+    this.historyListView.on("@click", (e) => this.search(e.detail.value));
   }
 
   changeTab(tab) {
@@ -59,8 +69,10 @@ export default class Controller {
 
     if (this.store.selectedTab === TabType.keyword) {
       this.keywordListView.show(this.store.getKeywordList());
+      this.historyListView.hide();
     } else if (this.store.selectedTab === TabType.history) {
       this.keywordListView.hide();
+      this.historyListView.show(this.store.getHistoryList());
     } else {
       throw "사용할 수 없는 탭입니다.";
     }
@@ -69,11 +81,11 @@ export default class Controller {
   }
 
   renderSearchResult() {
-    //Todo
     this.searchFormView.show(this.store.searchKeyword);
 
     this.tabView.hide();
     this.keywordListView.hide();
+    this.historyListView.hide();
 
     this.searchResultView.show(this.store.searchResult);
   }

@@ -25,4 +25,12 @@ export default class Store {
   getKeywordList() {
     return this.storage.keywordData;
   }
+
+  getHistoryList() {
+    return this.storage.historyData.sort(this._sortHistory);
+  }
+
+  _sortHistory(a, b) {
+    return b.date > a.date;
+  }
 }
