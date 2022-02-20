@@ -10,6 +10,7 @@
 
 ```
   npx lite-server --baseDir vanilla
+  npx lite-server --baseDir react
 ```
 
 <br />
@@ -80,3 +81,60 @@ obj.dispatchEvent(dogFound);
 ```
 
 <br />
+
+## 📖 ch-2 React
+
+### 🙄 React
+- DOM에 엘리먼트가 있듯이 리액트 앱에도 `엘리먼트(Element)`라는 개념이 있고 이것은 리액트 앱을 구성하는 최소 단위다. 
+- 원자가 모여 물질을 이루듯 리액트 엘리먼트 여러개를 모아 리액트 앱을 만든다. 리액트 엘리먼트는 문서를 표현하는 방식이라는 점에서 돔 엘리먼트와 유사하다.
+
+```
+  "엘리먼트(Element)"는 리액트 앱을 구성하는 최소 단위다.
+```
+
+- React 라이브러리가 제공하는 API 중 엘리먼트를 만들 수 있는 것이 바로 `createElement()` 함수다. 아래 예제에서 "Hello world" 문자열을 담은 h1 엘리먼트를 만들 때 사용했다.
+
+```js
+  React.createElement("h1", null, "Hello World") // 6
+```
+
+- 콘솔 로그로 반환된 값을 찍어보면 돔 엘리먼트와 달리 `일반 객체`다.
+
+```
+{
+  type: "h1",
+  props: {
+    children: "Hello World"
+  }
+}
+```
+
+- `가상돔(Virtual Dom)`은 리액트 어플리케이션과 돔 사이에 위치하는 계층으로써 최소한의 연산으로 화면을 그린다.
+
+<br />
+
+### 🙄 ReactDOM
+- 리액트가 만든 가상돔은 `일반 객체`이다. 리액트가 가상돔을 사용하지 않고 돔을 직접 사용했다면 브라우저에서만 사용하는 라이브러리로 제한되었을지 모른다. 하지만 일반 객체 모양을 갖는 가상돔은 이걸 렌더링하는 환경에 따라 여러 곳에서 사용할 수 있다.
+- 리액트를 웹 브라우저에서 동작하게 하려면 `가상돔`이 돔 API 호출하도록 하면 될 것이다. 이러한 역할을 하는 것이 `ReactDOM` 라이브러리다. 보통은 웹 개발에서 리액트를 사용한다고 하면 `react + reactDOM`을 사용하는 것이다.
+
+```html
+<script
+  crossorigin
+  src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+></script>
+```
+- 위 예제가 리액트 다음으로 가져온 라이브러리가 바로 ReactDOM이다.
+
+```js
+  ReactDOM.render(element, document.querySelector("#app")) // 7
+```
+- 어플리케이션에서는 리액트 엘리먼트를 ReactDOM.render() 함수의 인자로 전달한다.
+- `ReactDOM.render()` 함수는 `리액트 앨리먼트`를 받아서 가상돔을 만들기 시작한다.
+- 이렇게 만들어진 가상돔은 진짜 돔에 반영되고 그 위치는 두 번째 인자로 전달한 아이디 `app`의 앨리먼트의 자식이다. 이런 과정을 통해 리액트 어플리케이션이 돔에 반영된다.
+
+<br />
+
+### 🙄 Babel
+```html
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+```
