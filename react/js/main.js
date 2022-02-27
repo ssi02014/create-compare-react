@@ -1,4 +1,18 @@
 class App extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      searchKeyword: "",
+    };
+  }
+
+  handleChangeInput(e) {
+    this.setState({
+      searchKeyword: e.target.value,
+    });
+  }
+
   render() {
     return (
       <>
@@ -7,7 +21,13 @@ class App extends React.Component {
         </header>
         <div className="container">
           <form>
-            <input type="text" placeholder="검색어를 입력하세요." autoFocus />
+            <input
+              type="text"
+              placeholder="검색어를 입력하세요."
+              value={this.state.searchKeyword}
+              onChange={(e) => this.handleChangeInput(e)}
+              autoFocus
+            />
             <button type="reset" className="btn-reset"></button>
           </form>
         </div>
@@ -21,6 +41,8 @@ class App extends React.Component {
     );
   }
 }
+
+ReactDOM.render(<App />, document.querySelector("#app"));
 
 // const element = (
 //   <>
@@ -42,4 +64,3 @@ class App extends React.Component {
 //   </>
 // );
 // ReactDOM.render(element, document.querySelector("#app"));
-ReactDOM.render(<App />, document.querySelector("#app"));

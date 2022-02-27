@@ -265,3 +265,58 @@ ReactDOM.render(<App />, document.querySelector("#app")); // 3
 
 - 리액트 컴포넌트는 React 라이브러리가 제공한 `Component 클래스`를 `상속`해서 만드는데 어플리케이션을 나타내는 App 컴포넌트로 이름 지었다(1).
 - 리액트 컴포넌트 구성 요소 중 `render()` 메서드는 리액트 앱의 기본 구성 요소인 리액트 엘리먼트를 반환해서 돔을 만드는 역할을 한다(2).
+
+<br />
+
+### 🙄 State
+
+- 리액트 컴포넌트 구성요소 중 state는 `컴포넌트의 상태를 저장하기 위한 용도`이다. 이것은 컴포넌트가 유지해야 할 값으로서 `컴포넌트 내부에서만 접근`할 수 있는 속성을 가진다.
+- 클래스에서 state를 사용하려면 `생성자 함수`에서 `멤버 변수`로 등록해 초기값을 설정한다.
+
+```jsx
+  constructor() {
+    super() // 1
+    this.state = { searchKeyword: "" } // 2
+  }
+```
+
+- App 클래스는 React.Component 클래스를 상속했기 때문에 생성 시점에 `부모의 생성자 함수를 호출`해야 한다(1). 그리고 나서 생성된 `this`에 `state`란 객체를 등록해 상태를 만들 수 있다(2).
+
+### 🙄 이벤트 처리
+
+- 인풋 요소에 문자를 입력하면 `change` 이벤트가 발생한다. 이 이벤트를 수신하면 입력한 값을 알 수 있는데 이걸로 상태를 갱신하면 되지 않을까?
+- 컴포넌트의 state는 input 엘리먼트의 value에 연결되어 있기 때문에 입력한 값이 곧장 인풋 엘리먼트에 표시될 것이다.
+- 리액트에서 이벤트를 처리하는 방식은 일반 자바스크립트를 사용하는 것과 유사하다. 다만 이벤트 핸들러 이름이 조금 다르다. 앞서 JSX에서도 소개 했듯이 HTML에서 change 이벤트를 처리하려면 `onchange` 라는 이름의 속성을 사용하지만 리액트에는 onChange로 `카멜케이스`를 사용한다.
+
+```jsx
+<input
+  value={this.state.searchKeyword}
+  onChange={(e) => this.handleChangeInput(e)} // 1
+/>
+```
+
+- change 이벤트가 발생하면 클래스의 handleChange 메서드가 처리하도록 연결했다.
+- value 속성과 마찬가지로 onChange도 자바스크립트 표현식을 사용하려면 중괄호를 사용한다. 익명 함수를 사용했는데 객체로 받은 `이벤트 객체`를 곧장 `handleChangeInput() 메서드에 전달한다.`
+
+```jsx
+  handleChangeInput(event) {
+    const searchKeyword = event.target.value
+    this.searchKeyword = searchKeyword
+    this.forceUpdate() // 1
+  }
+```
+
+- handleChangeInput() 이라는 이름으로 핸들러 이름을 정했다(1). `handle*`로 시작하는 이벤트 핸들러 이름은 리액트 관례를 따랐다.
+- 인풋 엘리먼트에 연결되어 있는 상태를 이 값으로 갱신하면 화면이 반응할 것이다. 하지만 위 코드처럼 직접 state 객체를 직접 수정하면 리액트 앨리먼트가 반응하지 않는다.
+- 리액트 컴포넌트는 스스로 그려져야 할 때를 알고 있고 필요할 때만 `render()` 함수를 호출해서 컴포넌트를 다시 그린다. 만약 `강제로 컴포넌트의 render() 함수를 호출`하려면 클래스의 `forceUpdate()` 메서드를 사용해야 한다.
+
+```jsx
+  handleChangeInput(event) {
+    const searchKeyword = event.target.value
+    this.setState({ searchKeyword }) // 1
+  }
+```
+
+- 리액트 컴포넌트가 `스스로 상태의 변화를 인지`하고 `render()를 호출`하도록 하는 방법이 필요하다. 기억하자!! 항상 컴포넌트의 상태를 갱신하려면 `setState()` 메서드를 사용하자!
+- 클래스가 제공하는 setState() 메서드로 상태를 변경했다. 이 메서드는 컴포넌트의 상태를 변화시키겠다는 컴포넌트와의 직접적인 약속이다.
+- 이 메서드를 호출하면 비로소 컴포넌트는 상태 변화를 알 수 있고 다시 그려야할지 여부도 판단할 수도 있는 것이다.
