@@ -82,7 +82,7 @@ obj.dispatchEvent(dogFound);
 
 <br />
 
-## 📖 ch-2 React
+## 📖 ch-2 React 소개
 
 ### 🙄 React
 
@@ -224,7 +224,7 @@ ReactDOM.render(element, document.querySelector("#app"));
 
 <br />
 
-### 🙄 중간 점검
+### 🤓 중간 점검
 
 - 리액트 앱을 이루는 최소단위가 `리액트 엘리먼트`인데 이걸 리액트 라이브러리의 `React.createElement()` 함수로 만들수 있다.
 - 리액트 엘리먼트를 `가상 돔`으로 만들어 실제 돔에 반영해 주는 것이 바로 `ReactDOM`의 역할이다. 리액트를 사용하려면 반드시 이 두 개의 라이브러리를 사용해야 한다.
@@ -232,3 +232,36 @@ ReactDOM.render(element, document.querySelector("#app"));
 - JSX는 `UI 코드의 가독성`을 높여준다. 함수 호출만으로도 리액트 어플리케이션 개발이 가능하지만 약간의 문법을 가미하면 생각보다 UI 개발 환경이 편해진다.
 
 <br />
+
+## 📖 ch-3 React 사용편
+
+### 🙄 리액트 컴포넌트
+
+- 엘리먼트가 리액트 앱을 구성하는 최소단위라면, 컴포넌트는 UI를 나타내는 엘리먼트와 어플리케이션 로직을 포함한 `상위 개념`이다.
+- 로직은 컴포넌트의 상태를 변경하면서 UI 엘리먼트를 제어한다. 우리가 하려는 것은 입력 값이라는 상태를 기억하려는 것이다. 컴포넌트가 적합하다.
+
+```jsx
+// 1
+class App extends React.Component {
+  render() {
+    // 2
+    return (
+      <>
+        <header>
+          <h2 className="container">검색</h2>
+        </header>
+        <div className="container">
+          <form>
+            <input type="text" placeholder="검색어를 입력하세요" />
+          </form>
+        </div>
+      </>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.querySelector("#app")); // 3
+```
+
+- 리액트 컴포넌트는 React 라이브러리가 제공한 `Component 클래스`를 `상속`해서 만드는데 어플리케이션을 나타내는 App 컴포넌트로 이름 지었다(1).
+- 리액트 컴포넌트 구성 요소 중 `render()` 메서드는 리액트 앱의 기본 구성 요소인 리액트 엘리먼트를 반환해서 돔을 만드는 역할을 한다(2).
