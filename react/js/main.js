@@ -8,9 +8,37 @@ class App extends React.Component {
   }
 
   handleChangeInput(e) {
+    const { value } = e.target;
+
+    if (value.length < 1) {
+      return this.handleReset();
+    }
+
     this.setState({
-      searchKeyword: e.target.value,
+      searchKeyword: value,
     });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(e);
+  }
+
+  handleReset(e) {
+    // this.setState({
+    //   searchKeyword: "",
+    // });
+
+    this.setState(
+      () => {
+        // 여기서 상태 변화
+        return { searchKeyword: "" };
+      },
+      () => {
+        // 상태 변화 후 호출
+        console.log(this.state.searchKeyword);
+      }
+    );
   }
 
   render() {
@@ -20,7 +48,10 @@ class App extends React.Component {
           <h2 className="container">검색</h2>
         </header>
         <div className="container">
-          <form>
+          <form
+            onSubmit={(e) => this.handleSubmit(e)}
+            onReset={(e) => this.handleReset(e)}
+          >
             <input
               type="text"
               placeholder="검색어를 입력하세요."
@@ -28,7 +59,9 @@ class App extends React.Component {
               onChange={(e) => this.handleChangeInput(e)}
               autoFocus
             />
-            <button type="reset" className="btn-reset"></button>
+            {this.state.searchKeyword.length > 0 && (
+              <button type="reset" className="btn-reset"></button>
+            )}
           </form>
         </div>
         <div className="content">
