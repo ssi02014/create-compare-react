@@ -14,7 +14,7 @@ class App extends React.Component {
   handleChangeInput(e) {
     const { value } = e.target;
 
-    if (value.length < 1) {
+    if (value.length < 1 && this.state.submitted) {
       return this.handleReset();
     }
 
@@ -39,6 +39,7 @@ class App extends React.Component {
   handleReset(e) {
     this.setState({
       searchKeyword: "",
+      submitted: false,
     });
     // this.setState(
     //   () => {
