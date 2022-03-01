@@ -1,3 +1,5 @@
+import store from "./js/Store.js";
+
 class App extends React.Component {
   constructor() {
     super();
@@ -5,6 +7,7 @@ class App extends React.Component {
     this.state = {
       searchKeyword: "",
       searchResult: [],
+      submitted: false,
     };
   }
 
@@ -22,59 +25,73 @@ class App extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(e);
+    this.search(this.state.searchKeyword);
+  }
+
+  search(searchKeyword) {
+    const searchResult = store.search(searchKeyword);
+    this.setState({
+      submitted: true,
+      searchResult,
+    });
   }
 
   handleReset(e) {
-    // this.setState({
-    //   searchKeyword: "",
-    // });
-
-    this.setState(
-      () => {
-        // 여기서 상태 변화
-        return { searchKeyword: "" };
-      },
-      () => {
-        // 상태 변화 후 호출
-        console.log(this.state.searchKeyword);
-      }
-    );
+    this.setState({
+      searchKeyword: "",
+    });
+    // this.setState(
+    //   () => {
+    //     // 여기서 상태 변화
+    //     return { searchKeyword: "" };
+    //   },
+    //   () => {
+    //     // 상태 변화 후 호출
+    //     console.log(this.state.searchKeyword);
+    //   }
+    // );
   }
-
   render() {
+    const searchForm = (
+      <form
+        onSubmit={(e) => this.handleSubmit(e)}
+        onReset={(e) => this.handleReset(e)}
+      >
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요."
+          value={this.state.searchKeyword}
+          onChange={(e) => this.handleChangeInput(e)}
+          autoFocus
+        />
+        {this.state.searchKeyword.length > 0 && (
+          <button type="reset" className="btn-reset"></button>
+        )}
+      </form>
+    );
+
+    const searchResult =
+      this.state.searchResult.length > 0 ? (
+        <ul className="result">
+          {this.state.searchResult.map((item) => (
+            <li key={item.id}>
+              <img src={item.imageUrl} alt={item.name} />
+              <p>{item.name}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="empty-box">검색 결과가 없습니다.</div>
+      );
+
     return (
       <>
         <header>
           <h2 className="container">검색</h2>
         </header>
         <div className="container">
-          <form
-            onSubmit={(e) => this.handleSubmit(e)}
-            onReset={(e) => this.handleReset(e)}
-          >
-            <input
-              type="text"
-              placeholder="검색어를 입력하세요."
-              value={this.state.searchKeyword}
-              onChange={(e) => this.handleChangeInput(e)}
-              autoFocus
-            />
-            {this.state.searchKeyword.length > 0 && (
-              <button type="reset" className="btn-reset"></button>
-            )}
-          </form>
-        </div>
-        <div className="content">
-          {this.state.searchResult.length > 0 ? (
-            <div>TODO: 검색 결과 목록 표시하기</div>
-          ) : (
-            <div className="empty-box">검색 결과가 없습니다.</div>
-          )}
-          <div id="tab-view"></div>
-          <div id="keyword-list-view"></div>
-          <div id="history-list-view"></div>
-          <div id="search-result-view"></div>
+          {searchForm}
+          <div className="content">{this.state.submitted && searchResult}</div>
         </div>
       </>
     );
