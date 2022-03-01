@@ -322,3 +322,24 @@ ReactDOM.render(<App />, document.querySelector("#app")); // 3
 - 리액트 컴포넌트가 `스스로 상태의 변화를 인지`하고 `render()를 호출`하도록 하는 방법이 필요하다. 기억하자!! 항상 컴포넌트의 상태를 갱신하려면 `setState()` 메서드를 사용하자!
 - 클래스가 제공하는 setState() 메서드로 상태를 변경했다. 이 메서드는 컴포넌트의 상태를 변화시키겠다는 컴포넌트와의 직접적인 약속이다.
 - 이 메서드를 호출하면 비로소 컴포넌트는 상태 변화를 알 수 있고 다시 그려야할지 여부도 판단할 수도 있는 것이다.
+
+<br />
+
+### 🙄 폼 제출(submit)과 초기화(reset)
+
+- 폼에서 엔터를 입력하면 `submit` 이벤트가 발생하는데 이를 잡아서 처리하려면, 변경 이벤트를 onChange 속성으로 받듯이 onSubmit 속성으로 폼 제출(submit)을 이벤트를 처리할 수 있다.
+- form 내부에서 button은 기본적으로 submit 이벤트가 발생한다.
+
+```js
+  <form onSubmit={event => this.handleSubmit(event)}>
+```
+
+- button의 type="reset" 속성에 의해 폼에 reset 이벤트를 발생시킬 수 있다.
+
+```js
+<form onReset={() => this.handleReset()}>
+  <button type="reset" className="btn-reset"></button>
+</form>
+```
+
+<br />
