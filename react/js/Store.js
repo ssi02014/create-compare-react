@@ -19,40 +19,6 @@ class Store {
   getKeywordList() {
     return this.storage.keywordData;
   }
-
-  getHistoryList() {
-    return this.storage.historyData.sort(this._sortHistory);
-  }
-
-  removeHistory(keyword) {
-    this.storage.historyData = this.storage.historyData.filter(
-      (history) => history.keyword !== keyword
-    );
-  }
-
-  addHistory(keyword) {
-    keyword = keyword.trim();
-
-    if (!keyword) return;
-
-    const id = createNextId(this.storage.historyData);
-    const date = new Date();
-
-    const hasHistory = this.storage.historyData.some(
-      (history) => history.keyword === keyword
-    );
-
-    if (hasHistory) {
-      this.removeHistory(keyword);
-    }
-
-    this.storage.historyData.push({ id, keyword, date });
-    this.storage.historyData = this.storage.historyData.sort(this._sortHistory);
-  }
-
-  _sortHistory(a, b) {
-    return b.date - a.date;
-  }
 }
 
 const store = new Store(storage);
