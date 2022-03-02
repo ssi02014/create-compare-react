@@ -1,5 +1,15 @@
 import store from "./js/Store.js";
 
+const TabType = {
+  KEYWORD: "KEYWORD",
+  HISTORY: "HISTORY",
+};
+
+const TabLabel = {
+  [TabType.KEYWORD]: "추천 검색어",
+  [TabType.HISTORY]: "최근 검색어",
+};
+
 class App extends React.Component {
   constructor() {
     super();
@@ -8,6 +18,7 @@ class App extends React.Component {
       searchKeyword: "",
       searchResult: [],
       submitted: false,
+      selectedTab: TabType.KEYWORD,
     };
   }
 
@@ -52,6 +63,13 @@ class App extends React.Component {
     //   }
     // );
   }
+
+  handleTabs(tabType) {
+    this.setState({
+      selectedTab: tabType,
+    });
+  }
+
   render() {
     const searchForm = (
       <form
@@ -85,6 +103,23 @@ class App extends React.Component {
         <div className="empty-box">검색 결과가 없습니다.</div>
       );
 
+    const tabs = (
+      <>
+        <ul className="tabs">
+          {Object.values(TabType).map((tabType) => (
+            <li
+              key={tabType}
+              onClick={() => this.handleTabs(tabType)}
+              className={this.state.selectedTab === tabType ? "active" : ""}
+            >
+              {TabLabel[tabType]}
+            </li>
+          ))}
+        </ul>
+        {this.state.selectedTab === TabType.KEYWORD && <div>추천검색어</div>}
+        {this.state.selectedTab === TabType.HISTORY && <div>최근검색어</div>}
+      </>
+    );
     return (
       <>
         <header>
@@ -92,7 +127,9 @@ class App extends React.Component {
         </header>
         <div className="container">
           {searchForm}
-          <div className="content">{this.state.submitted && searchResult}</div>
+          <div className="content">
+            {this.state.submitted ? searchResult : tabs}
+          </div>
         </div>
       </>
     );
@@ -100,24 +137,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.querySelector("#app"));
-
-// const element = (
-//   <>
-//     <header>
-//       <h2 className="container">검색</h2>
-//     </header>
-//     <div className="container">
-//       <form>
-//         <input type="text" placeholder="검색어를 입력하세요." autoFocus />
-//         <button type="reset" className="btn-reset"></button>
-//       </form>
-//     </div>
-//     <div className="content">
-//       <div id="tab-view"></div>
-//       <div id="keyword-list-view"></div>
-//       <div id="history-list-view"></div>
-//       <div id="search-result-view"></div>
-//     </div>
-//   </>
-// );
-// ReactDOM.render(element, document.querySelector("#app"));
