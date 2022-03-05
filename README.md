@@ -369,3 +369,36 @@ ReactDOM.render(<App />, document.querySelector("#app")); // 3
 - 마지막으로 컴포넌트는 본인의 삶을 마감하는 순서를 따른다
 
 <br />
+
+### 🙄 이벤트 전파를 막는 stopPropagation()
+
+- `stopPropagation()`은 버블링과 캡쳐링 같은 전파방식을 사용하지 않고 그냥 원하는 태그에서의 이벤트만 신경쓰고 싶을 때 사용하는 메서드이다.
+
+```js
+const keywordList = (
+  <ul className="list">
+    {this.state.keywordList.map((item, idx) => (
+      <li key={item.id} onClick={() => this.search(item.keyword)}>
+        <span className="number">{idx + 1}</span>
+        <span>{item.keyword}</span>
+      </li>
+    ))}
+  </ul>
+);
+```
+
+- button을 클릭하면 상단에 있는 li의 click이벤트가 버블링을 통해서 같이 실행되는 예제이다. 이것은 의도치 않은 결과가 발생한다.
+
+```js
+handleRemoveHistory(e, keyword) {
+  e.stopPropagation();
+
+  store.removeHistory(keyword);
+  const historyList = store.getHistoryList();
+  this.setState({ historyList });
+}
+```
+
+- 이런 상황을 방지하기 위해서 `stopPropagation()`을 사용했다. `stopPropagation()`을 추가함으로써 이벤트 전파는 동작하지 않고 button 태그에서만 클릭 이벤트가 발생하는 것을 확인할 수 있다.
+
+<br />
