@@ -399,6 +399,6 @@ handleRemoveHistory(e, keyword) {
 }
 ```
 
-- 이런 상황을 방지하기 위해서 `stopPropagation()`을 사용했다. `stopPropagation()`을 추가함으로써 이벤트 전파는 동작하지 않고 button 태그에서만 클릭 이벤트가 발생하는 것을 확인할 수 있다.
+- 이런 상황을 방지하기 위해서 `stopPropagation()`을 사용했다. `stopPropagation()`을 추가함으로써 이벤트 전파는 동작하지 않고 button 태그 내에서만 클릭 이벤트가 발생하는 것을 확인할 수 있다.
 
 <br />
