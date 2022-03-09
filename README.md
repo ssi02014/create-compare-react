@@ -402,3 +402,34 @@ handleRemoveHistory(e, keyword) {
 - 이런 상황을 방지하기 위해서 `stopPropagation()`을 사용했다. `stopPropagation()`을 추가함으로써 이벤트 전파는 동작하지 않고 button 태그 내에서만 클릭 이벤트가 발생하는 것을 확인할 수 있다.
 
 <br />
+
+## 📖 ch-4 컴포넌트
+### 🙄 컴포넌트를 사용하는 이유
+- 관련된 코드 덩어리를 모아 하나의 독립된 개념으로 `추상화`하는 기법은 프로그래밍에서 개발자의 사고력을 비약적으로 높여준다. 
+- 상태와 UI 코드로 이루어진 화면 개발에서도 `컴포넌트`라는 개념을 사용해 `추상화` 할 수 있다.
+
+<br />
+
+### 🙄 재사용 가능한 컴포넌트로 개선
+- 리액트 컴포넌트에서 UI 상태로 사용할 수 있는 것은 state 말고도 `props`가 있다. 
+- State가 컴포넌트 내부에서 관리는 상태라면 props는 컴포넌트 외부에서 들어와 내부 UI에 영향을 줄 수 있는 녀석이다. 
+- 이 값에 의존한 리액트 앨리먼트를 만들면 props 변화에 따라 UI가 리액티브하게 반응한다.
+
+```jsx
+// App.js
+class App extends React.Component {
+  render() {
+    return <Header title={"검색"} /> // 3
+  }
+}
+
+// Header.js
+const Header = ({ title }) => {
+  return (
+    <header>
+      <h2 className="container">{title}</h2>
+    </header>
+  );
+};
+```
+- Props는 `객체 모양`으로 컴포넌트로 전달된다. 이 값으로 리액트 앨리먼트를 만든다. 컴포넌트의 props는 속성 이름으로 전달한다. Hello 컴포넌트는 전달된 `name 값`에 따라 UI가 변경될 것이다.
