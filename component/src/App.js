@@ -1,9 +1,13 @@
 import React, { useState, useCallback } from "react";
+import store from "./Store";
 import Header from "./components/Header";
 import SearchForm from "./components/SearchForm";
+import SearchResult from "./components/SearchResult";
 
 const App = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [submitted, setSubmitted] = useState(false);
 
   const onChange = useCallback((value) => {
     if (searchKeyword.length < 1) {
@@ -14,11 +18,19 @@ const App = () => {
   }, []);
 
   const onSubmit = useCallback((searchKeyword) => {
-    console.log(searchKeyword);
+    onSearch(searchKeyword);
   }, []);
 
   const onReset = useCallback(() => {
     setSearchKeyword("");
+    setSubmitted(false);
+    setSearchResult([]);
+  }, []);
+
+  const onSearch = useCallback((searchKeyword) => {
+    const searchResult = store.search(searchKeyword);
+    setSearchResult(searchResult);
+    setSubmitted(true);
   }, []);
 
   return (
@@ -31,6 +43,9 @@ const App = () => {
           onSubmit={onSubmit}
           onReset={onReset}
         />
+        <div className="content">
+          {submitted && <SearchResult data={searchResult} />}
+        </div>
       </div>
     </>
   );
