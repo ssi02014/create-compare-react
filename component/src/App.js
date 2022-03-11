@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import SearchForm from "./components/SearchForm";
 import SearchResult from "./components/SearchResult";
 import Tabs, { TabType } from "./components/Tabs";
+import List from "./components/List";
 
 const App = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -35,6 +36,7 @@ const App = () => {
 
   const onSearch = useCallback((searchKeyword) => {
     const searchResult = store.search(searchKeyword);
+    setSearchKeyword(searchKeyword);
     setSearchResult(searchResult);
     setSubmitted(true);
   }, []);
@@ -55,8 +57,10 @@ const App = () => {
           ) : (
             <>
               <Tabs selectedTab={selectedTab} onChange={onChangeTabs} />
-              {selectedTab === TabType.KEYWORD && <>TODO: 추천 검색 목록</>}
-              {selectedTab === TabType.HISTORY && <>TODO: 최근 검색 목록</>}
+              <List
+                type={selectedTab === TabType.KEYWORD ? "keyword" : "history"}
+                onSearch={(keyword) => onSearch(keyword)}
+              />
             </>
           )}
         </div>
