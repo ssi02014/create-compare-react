@@ -404,22 +404,25 @@ handleRemoveHistory(e, keyword) {
 <br />
 
 ## 📖 ch-4 컴포넌트
+
 ### 🙄 컴포넌트를 사용하는 이유
-- 관련된 코드 덩어리를 모아 하나의 독립된 개념으로 `추상화`하는 기법은 프로그래밍에서 개발자의 사고력을 비약적으로 높여준다. 
+
+- 관련된 코드 덩어리를 모아 하나의 독립된 개념으로 `추상화`하는 기법은 프로그래밍에서 개발자의 사고력을 비약적으로 높여준다.
 - 상태와 UI 코드로 이루어진 화면 개발에서도 `컴포넌트`라는 개념을 사용해 `추상화` 할 수 있다.
 
 <br />
 
 ### 🙄 재사용 가능한 컴포넌트로 개선
-- 리액트 컴포넌트에서 UI 상태로 사용할 수 있는 것은 state 말고도 `props`가 있다. 
-- State가 컴포넌트 내부에서 관리는 상태라면 props는 컴포넌트 외부에서 들어와 내부 UI에 영향을 줄 수 있는 녀석이다. 
+
+- 리액트 컴포넌트에서 UI 상태로 사용할 수 있는 것은 state 말고도 `props`가 있다.
+- State가 컴포넌트 내부에서 관리는 상태라면 props는 컴포넌트 외부에서 들어와 내부 UI에 영향을 줄 수 있는 녀석이다.
 - 이 값에 의존한 리액트 앨리먼트를 만들면 props 변화에 따라 UI가 리액티브하게 반응한다.
 
 ```jsx
 // App.js
 class App extends React.Component {
   render() {
-    return <Header title={"검색"} /> // 3
+    return <Header title={"검색"} />; // 3
   }
 }
 
@@ -432,4 +435,121 @@ const Header = ({ title }) => {
   );
 };
 ```
+
 - Props는 `객체 모양`으로 컴포넌트로 전달된다. 이 값으로 리액트 앨리먼트를 만든다. 컴포넌트의 props는 속성 이름으로 전달한다. Hello 컴포넌트는 전달된 `name 값`에 따라 UI가 변경될 것이다.
+
+<br />
+
+### 🙄 조합: 컴포넌트 담기
+
+- 리액트 클래스형 컴포넌트는 클래스 상속으로 컴포넌트 재활용하는 것을 권장하지 않는다.
+
+```
+Facebook에서는 수천 개의 React 컴포넌트를 사용하지만,
+컴포넌트를 상속 계층 구조로 작성을 권장할만한 사례를 아직 찾지 못했습니다.
+- 출처: 리액트 문서
+```
+
+- 대신, props를 통해 컴포넌트를 합성하는 것을 권장한다.
+
+```jsx
+const List = ({ data, onClick, renderItem }) => {
+  return (
+    <ul className="list">
+      {data.map((item, idx) => (
+        <li key={item.id} onClick={() => onClick(item.keyword)}>
+          {renderItem(item, idx)}
+        </li>
+      ))}
+    </ul>
+  );
+};
+```
+
+- 클래스를 사용하지 않고 함수 컴포넌트로 만든 List컴포넌트이다. 외부에서 렌더링에 필요한 데이터를 주입 받겠다는 의도이다.
+- 키워드 목록 데이터를 props.data로 받았다.
+- 리스트 출력까지만 담당하고 리스트를 구성하는 각 항목을 출력하는 함수는 props.renderItem이란 이름으로 전달하도록 했다.
+- 참고로, props에 함수를 전달할 수 있다. 이러한 함수 중 리액트 엘리먼트를 반환하는 함수를 `render props`라고 한다.
+
+```jsx
+const KeywordList = ({ onClick }) => {
+  const [data, setData] = useState([]);
+
+  const renderItem = useCallback((item, idx) => {
+    return (
+      <>
+        <span className="number">{idx + 1}</span>
+        <span>{item.keyword}</span>
+      </>
+    );
+  });
+
+  useEffect(() => {
+    setData(store.getKeywordList());
+  }, []);
+
+  return <List data={data} renderItem={renderItem} onClick={onClick} />;
+};
+```
+
+- 위 List 컴포넌트를 이용한 KeywordList 함수형 컴포넌트를 만들었다.
+- List 컴포넌트가 `공통 로직`과 `UI`를 담는 컴포넌트이고, 이를 이용해서 KeywordList를 만들었다.
+- 클래스 상속과 달리 List안에 renderItem이란 render props를 전달해서 List가 컴포넌트를 그리도록 했다. 뿐만아니라 컴포넌트 자체로 props를 전달할 수 있다.
+- 이렇게 props로 `컴포넌트를 전달`하거나 `렌더하는 방법을 전달`하는 방식을 `컴포넌트 담기`라고 부른다.
+
+<br />
+
+### 🙄 조합: 특수화
+
+- 컴포넌트 담기 말고 컴포넌트를 조합하는 방식으로 특수화가 있다.
+
+```jsx
+onst List = ({ data, onClick, hasIndex, hasDate, onRemove }) => {
+  const handleClickRemove = useCallback((e, keyword) => {
+    e.stopPropagation();
+    onRemove(keyword);
+  }, []);
+
+  return (
+    <ul className="list">
+      {data.map((item, idx) => (
+        <li key={item.id} onClick={() => onClick(item.keyword)}>
+          {hasIndex && <span className="number">{idx + 1}</span>}
+          <span>{item.keyword}</span>
+          {hasDate && (
+            <span className="date">{formatRelativeDate(item.date)}</span>
+          )}
+          {!!onRemove && (
+            <button
+              className="btn-remove"
+              onClick={(e) => handleClickRemove(e, item.keyword)}
+            ></button>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+};
+```
+
+- 기존의 컴포넌트 담기보다 외부에서 받는 props가 증가 했다. props를 어떻게 설정하느냐에 따라 조금씩 다른 모양과 행위를 하는 컴포넌트를 만드는데 사용한다.
+- 위 예제에서는 hasIndex를 설정하면 좌측에 순서를 표시하도록 했고, hasDate와 onRemove 함수에 따라 날짜와 삭제 버튼을 보이도록 했다.
+
+```jsx
+const KeywordList = ({ onClick }) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setData(store.getKeywordList());
+  }, []);
+
+  return <List data={data} onClick={onClick} hasIndex />;
+};
+
+export default KeywordList;
+```
+
+- 위 KeywordList 리스트에서는 순서와 키워드를 표시하기위해 hasIndex를 props로 전달했다.
+- KeywordList는 순서가 있는 List의 특수한 경우이기 때문이다.
+
+<br />

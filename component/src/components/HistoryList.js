@@ -12,7 +12,7 @@ const HistoryList = ({ onClick }) => {
     setData(store.getHistoryList());
   }, []);
 
-  const renderItem = useCallback((item, idx) => {
+  const renderItem = useCallback((item) => {
     return (
       <>
         <span>{item.keyword}</span>
@@ -23,7 +23,7 @@ const HistoryList = ({ onClick }) => {
         ></button>
       </>
     );
-  });
+  }, []);
 
   useEffect(() => {
     setData(store.getHistoryList());

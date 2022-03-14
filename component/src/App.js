@@ -4,8 +4,10 @@ import Header from "./components/Header";
 import SearchForm from "./components/SearchForm";
 import SearchResult from "./components/SearchResult";
 import Tabs, { TabType } from "./components/Tabs";
-import KeywordList from "./components/KeywordList";
-import HistoryList from "./components/HistoryList";
+// import KeywordList from "./components/KeywordList";
+import KeywordList from "./components/KeywordListSpecialization";
+// import HistoryList from "./components/HistoryList";
+import HistoryList from "./components/HistoryListSpecialization";
 
 const App = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
