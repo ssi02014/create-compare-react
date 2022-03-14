@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import store from "./Store";
 import Header from "./components/Header";
 import SearchForm from "./components/SearchForm";
 import SearchResult from "./components/SearchResult";
 import Tabs, { TabType } from "./components/Tabs";
-import List from "./components/List";
+import KeywordList from "./components/KeywordList";
+import HistoryList from "./components/HistoryList";
 
 const App = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -57,10 +58,11 @@ const App = () => {
           ) : (
             <>
               <Tabs selectedTab={selectedTab} onChange={onChangeTabs} />
-              <List
-                type={selectedTab === TabType.KEYWORD ? "keyword" : "history"}
-                onSearch={(keyword) => onSearch(keyword)}
-              />
+              {selectedTab === TabType.KEYWORD ? (
+                <KeywordList onClick={(keyword) => onSearch(keyword)} />
+              ) : (
+                <HistoryList onClick={(keyword) => onSearch(keyword)} />
+              )}
             </>
           )}
         </div>
